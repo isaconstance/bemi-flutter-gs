@@ -1,0 +1,187 @@
+import 'package:flutter/material.dart';
+
+import '../widgets/bemi_header.dart';
+import '../widgets/assistente_card.dart';
+import '../widgets/atalho_card.dart';
+import '../widgets/app_bottom_navigation.dart';
+import 'documentos_screen.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  static const Color verde = Color(0xFF174F3B);
+  static const Color fundo = Color(0xFFFFF5E9);
+
+  void _navegar(int indice) {
+    if (indice == 0) return;
+
+    if (indice == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const DocumentosScreen(),
+        ),
+      );
+      return;
+    }
+
+    final mensagem = indice == 2
+        ? 'Consultas em breve!'
+        : 'Minha conta em breve!';
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem)),
+    );
+  }
+
+  void _abrirFuncionalidade(String nome) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$nome estará disponível em breve!'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: fundo,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            const BemiHeader(),
+
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: fundo,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(40),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Olá, Isabella!',
+                        style: TextStyle(
+                          color: verde,
+                          fontSize: 29,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      const Text(
+                        'Que bom ter você por aqui!',
+                        style: TextStyle(
+                          color: Color(0xFF292F29),
+                          fontSize: 19,
+                        ),
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      const AssistenteCard(),
+
+                      const SizedBox(height: 28),
+
+                      GridView.count(
+                        crossAxisCount: 2,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 14,
+                        childAspectRatio: 1.45,
+                        children: [
+                          AtalhoCard(
+                            icone: Icons.description_outlined,
+                            titulo: 'Documentos',
+                            onTap: () => _navegar(1),
+                          ),
+                          AtalhoCard(
+                            icone: Icons.calendar_month_outlined,
+                            titulo: 'Consultas',
+                            onTap: () => _abrirFuncionalidade('Consultas'),
+                          ),
+                          AtalhoCard(
+                            icone: Icons.notifications_none,
+                            titulo: 'Avisos',
+                            onTap: () => _abrirFuncionalidade('Avisos'),
+                          ),
+                          AtalhoCard(
+                            icone: Icons.groups_outlined,
+                            titulo: 'Família',
+                            onTap: () => _abrirFuncionalidade('Família'),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 22),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 88,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _abrirFuncionalidade('Emergência');
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFCF332D),
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(28),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.call, size: 32),
+                              SizedBox(width: 18),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Emergência',
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Ligue 192',
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: AppBottomNavigation(
+        indiceSelecionado: 0,
+        onTap: _navegar,
+      ),
+    );
+  }
+}
