@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../models/documento.dart';
 import '../providers/documento_provider.dart';
 
@@ -13,13 +12,15 @@ class DocumentoFormScreen extends StatefulWidget {
   });
 
   @override
-  State<DocumentoFormScreen> createState() =>
-      _DocumentoFormScreenState();
+  State<DocumentoFormScreen> createState() => _DocumentoFormScreenState();
 }
 
 class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
-  final _formKey = GlobalKey<FormState>();
+  static const Color verde = Color(0xFF174F3B);
+  static const Color verdeClaro = Color(0xFFE8ECD9);
+  static const Color fundo = Color(0xFFF8F8F3);
 
+  final _formKey = GlobalKey<FormState>();
   final _tipoController = TextEditingController();
   final _validadeController = TextEditingController();
   final _observacaoController = TextEditingController();
@@ -51,14 +52,49 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
     super.dispose();
   }
 
+  InputDecoration _decoracao({
+    required String label,
+    required IconData icone,
+    String? hint,
+    Widget? sufixo,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      prefixIcon: Icon(icone, color: verde),
+      suffixIcon: sufixo,
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 18,
+        vertical: 18,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFFE1E6DF)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: verde, width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Colors.red, width: 1.5),
+      ),
+    );
+  }
+
   Future<void> _selecionarData() async {
     final dataAtual = DateTime.now();
-
-    DateTime? dataInicial;
-
-    if (_validadeController.text.isNotEmpty) {
-      dataInicial = DateTime.tryParse(_validadeController.text);
-    }
+    final dataInicial = DateTime.tryParse(_validadeController.text);
 
     final dataSelecionada = await showDatePicker(
       context: context,
@@ -66,6 +102,21 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
       helpText: 'Selecione a validade',
+      cancelText: 'Cancelar',
+      confirmText: 'Confirmar',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: verde,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: verde,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (dataSelecionada != null) {
@@ -78,14 +129,20 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
     }
   }
 
-  Future<void> _salvarDocumento() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
+  String _formatarData(String data) {
+    final partes = data.split('-');
+
+    if (partes.length == 3) {
+      return '${partes[2]}/${partes[1]}/${partes[0]}';
     }
 
-    setState(() {
-      _salvando = true;
-    });
+    return data;
+  }
+
+  Future<void> _salvarDocumento() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _salvando = true);
 
     final provider = context.read<DocumentoProvider>();
 
@@ -95,7 +152,7 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
       final observacao = _observacaoController.text.trim();
 
       if (_editando) {
-        final documentoAtualizado = Documento(
+        final atualizado = Documento(
           id: widget.documento!.id,
           tipo: tipo,
           validade: validade.isEmpty ? null : validade,
@@ -103,7 +160,7 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
           observacao: observacao,
         );
 
-        await provider.editarDocumento(documentoAtualizado);
+        await provider.editarDocumento(atualizado);
       } else {
         await provider.cadastrarDocumento(
           tipo: tipo,
@@ -137,9 +194,7 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
       );
     } finally {
       if (mounted) {
-        setState(() {
-          _salvando = false;
-        });
+        setState(() => _salvando = false);
       }
     }
   }
@@ -147,126 +202,241 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: fundo,
       appBar: AppBar(
+        backgroundColor: fundo,
+        foregroundColor: verde,
+        elevation: 0,
         title: Text(
-          _editando ? 'Editar documento' : 'Novo documento',
+          _editando ? 'Editar documento' : 'Adicionar documento',
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _editando
-                    ? 'Atualize as informações do documento.'
-                    : 'Cadastre um novo documento.',
-                style: Theme.of(context).textTheme.bodyLarge,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 30),
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: verdeClaro,
+                borderRadius: BorderRadius.circular(22),
               ),
-
-              const SizedBox(height: 24),
-
-              TextFormField(
-                controller: _tipoController,
-                decoration: const InputDecoration(
-                  labelText: 'Tipo do documento',
-                  hintText: 'Ex.: RG, Cartão SUS',
-                  prefixIcon: Icon(Icons.description_outlined),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Informe o tipo do documento';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 18),
-
-              TextFormField(
-                controller: _validadeController,
-                readOnly: true,
-                onTap: _selecionarData,
-                decoration: InputDecoration(
-                  labelText: 'Data de validade',
-                  hintText: 'Opcional',
-                  prefixIcon: const Icon(Icons.calendar_today),
-                  suffixIcon: IconButton(
-                    onPressed: _selecionarData,
-                    icon: const Icon(Icons.date_range),
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.folder_shared_outlined,
+                    color: verde,
+                    size: 38,
                   ),
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-
-              const SizedBox(height: 18),
-
-              DropdownButtonFormField<String>(
-                value: _status,
-                decoration: const InputDecoration(
-                  labelText: 'Status',
-                  prefixIcon: Icon(Icons.check_circle_outline),
-                  border: OutlineInputBorder(),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: 'OK',
-                    child: Text('OK'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Pendente',
-                    child: Text('Pendente'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Vencido',
-                    child: Text('Vencido'),
+                  SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      'Mantenha seus documentos organizados e suas informações sempre atualizadas.',
+                      style: TextStyle(
+                        color: verde,
+                        fontSize: 15,
+                        height: 1.4,
+                      ),
+                    ),
                   ),
                 ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _status = value;
-                    });
-                  }
-                },
               ),
+            ),
 
-              const SizedBox(height: 18),
+            const SizedBox(height: 28),
 
-              TextFormField(
-                controller: _observacaoController,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  labelText: 'Observação',
-                  hintText: 'Adicione informações sobre o documento',
-                  alignLabelWithHint: true,
-                  prefixIcon: Icon(Icons.notes),
-                  border: OutlineInputBorder(),
+            const Text(
+              'Informações do documento',
+              style: TextStyle(
+                color: verde,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            TextFormField(
+              controller: _tipoController,
+              textCapitalization: TextCapitalization.words,
+              decoration: _decoracao(
+                label: 'Tipo do documento',
+                hint: 'Ex.: RG, Cartão SUS',
+                icone: Icons.description_outlined,
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o tipo do documento';
+                }
+                return null;
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            TextFormField(
+              controller: _validadeController,
+              readOnly: true,
+              onTap: _selecionarData,
+              decoration: _decoracao(
+                label: 'Data de validade',
+                hint: 'Opcional',
+                icone: Icons.calendar_today_outlined,
+                sufixo: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_validadeController.text.isNotEmpty)
+                      IconButton(
+                        tooltip: 'Limpar data',
+                        onPressed: () {
+                          setState(() {
+                            _validadeController.clear();
+                          });
+                        },
+                        icon: const Icon(Icons.close, color: Colors.grey),
+                      ),
+                    IconButton(
+                      tooltip: 'Selecionar data',
+                      onPressed: _selecionarData,
+                      icon: const Icon(
+                        Icons.calendar_month_outlined,
+                        color: verde,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            ),
 
-              const SizedBox(height: 28),
+            const SizedBox(height: 26),
 
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _salvando ? null : _salvarDocumento,
-                  child: _salvando
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          _editando
-                              ? 'Salvar alterações'
-                              : 'Cadastrar documento',
+            const Text(
+              'Situação do documento',
+              style: TextStyle(
+                color: verde,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            const Text(
+              'Selecione a situação atual:',
+              style: TextStyle(color: Colors.black54, fontSize: 14),
+            ),
+
+            const SizedBox(height: 14),
+
+            Wrap(
+              spacing: 9,
+              runSpacing: 10,
+              children: [
+                _opcaoStatus('OK', const Color(0xFF287A4D)),
+                _opcaoStatus('Pendente', const Color(0xFFB7791F)),
+                _opcaoStatus('Vencido', const Color(0xFFC0392B)),
+              ],
+            ),
+
+            const SizedBox(height: 28),
+
+            const Text(
+              'Observações',
+              style: TextStyle(
+                color: verde,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            TextFormField(
+              controller: _observacaoController,
+              textCapitalization: TextCapitalization.sentences,
+              maxLines: 4,
+              decoration: _decoracao(
+                label: 'Observação',
+                hint: 'Adicione informações sobre o documento...',
+                icone: Icons.notes_outlined,
+              ).copyWith(
+                alignLabelWithHint: true,
+              ),
+            ),
+
+            const SizedBox(height: 32),
+
+            SizedBox(
+              height: 56,
+              child: ElevatedButton(
+                onPressed: _salvando ? null : _salvarDocumento,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: verde,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: verde.withValues(alpha: 0.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(17),
+                  ),
+                  elevation: 0,
+                ),
+                child: _salvando
+                    ? const SizedBox(
+                        height: 23,
+                        width: 23,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2.5,
                         ),
-                ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.check_circle_outline),
+                          const SizedBox(width: 10),
+                          Text(
+                            _editando
+                                ? 'Salvar alterações'
+                                : 'Cadastrar documento',
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _opcaoStatus(String texto, Color cor) {
+    final selecionado = _status == texto;
+
+    return ChoiceChip(
+      label: Text(texto),
+      selected: selecionado,
+      onSelected: (_) {
+        setState(() => _status = texto);
+      },
+      showCheckmark: true,
+      checkmarkColor: selecionado ? Colors.white : cor,
+      selectedColor: cor,
+      backgroundColor: Colors.white,
+      side: BorderSide(
+        color: selecionado ? cor : const Color(0xFFE1E6DF),
+      ),
+      labelStyle: TextStyle(
+        color: selecionado ? Colors.white : cor,
+        fontWeight: FontWeight.bold,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 9,
       ),
     );
   }

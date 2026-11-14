@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/bemi_header.dart';
 import '../widgets/assistente_card.dart';
 import '../widgets/atalho_card.dart';
 import '../widgets/app_bottom_navigation.dart';
 import 'documentos_screen.dart';
+import 'consultas_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,26 +18,34 @@ class _HomeScreenState extends State<HomeScreen> {
   static const Color fundo = Color(0xFFFFF5E9);
 
   void _navegar(int indice) {
-    if (indice == 0) return;
+  if (indice == 0) return;
 
-    if (indice == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const DocumentosScreen(),
-        ),
-      );
-      return;
-    }
-
-    final mensagem = indice == 2
-        ? 'Consultas em breve!'
-        : 'Minha conta em breve!';
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(mensagem)),
+  if (indice == 1) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const DocumentosScreen(),
+      ),
     );
+    return;
   }
+
+  if (indice == 2) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const ConsultasScreen(),
+      ),
+    );
+    return;
+  }
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Minha conta em breve!'),
+    ),
+  );
+}
 
   void _abrirFuncionalidade(String nome) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -112,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           AtalhoCard(
                             icone: Icons.calendar_month_outlined,
                             titulo: 'Consultas',
-                            onTap: () => _abrirFuncionalidade('Consultas'),
+                            onTap: () => _navegar(2),
                           ),
                           AtalhoCard(
                             icone: Icons.notifications_none,

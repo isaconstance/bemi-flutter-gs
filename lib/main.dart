@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'providers/documento_provider.dart';
 import 'screens/splash_screen.dart';
+import 'providers/consulta_provider.dart';
 
 void main() {
   runApp(const BemiApp());
@@ -18,6 +17,9 @@ class BemiApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => DocumentoProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ConsultaProvider(),
         ),
       ],
       child: MaterialApp(
