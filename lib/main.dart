@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'providers/documento_provider.dart';
 import 'screens/splash_screen.dart';
 import 'providers/consulta_provider.dart';
+import 'providers/auth_provider.dart';
 
 void main() {
   runApp(const BemiApp());
@@ -20,6 +21,9 @@ class BemiApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ConsultaProvider(),
+        ),
+        ChangeNotifierProvider(
+        create: (_) => AuthProvider(),
         ),
       ],
       child: MaterialApp(

@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
-
 import 'cadastro_screen.dart';
 import 'home_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,18 +31,36 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _entrar() {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+  Future<void> _entrar() async {
+  if (!_formKey.currentState!.validate()) {
+    return;
+  }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const HomeScreen(),
+  final authProvider = context.read<AuthProvider>();
+
+  await authProvider.carregarUsuario();
+
+  if (!mounted) return;
+
+  final emailDigitado = _emailController.text.trim().toLowerCase();
+  final emailCadastrado = authProvider.email?.trim().toLowerCase();
+
+  if (emailCadastrado == null || emailDigitado != emailCadastrado) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('E-mail não encontrado. Verifique seus dados ou cadastre-se.'),
       ),
     );
+    return;
   }
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (_) => const HomeScreen(),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {

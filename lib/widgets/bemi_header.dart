@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/avisos_screen.dart';
 
 class BemiHeader extends StatelessWidget {
   const BemiHeader({super.key});
@@ -10,10 +11,7 @@ class BemiHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: verde,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 22,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
       child: Row(
         children: [
           Image.asset(
@@ -34,10 +32,9 @@ class BemiHeader extends StatelessWidget {
           const Spacer(),
           IconButton(
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Avisos em breve!'),
-                ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AvisosScreen()),
               );
             },
             icon: const Icon(

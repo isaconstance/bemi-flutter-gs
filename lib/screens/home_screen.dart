@@ -5,6 +5,11 @@ import '../widgets/atalho_card.dart';
 import '../widgets/app_bottom_navigation.dart';
 import 'documentos_screen.dart';
 import 'consultas_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import 'conta_screen.dart';
+import 'avisos_screen.dart';
+import 'familia_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,46 +22,60 @@ class _HomeScreenState extends State<HomeScreen> {
   static const Color verde = Color(0xFF174F3B);
   static const Color fundo = Color(0xFFFFF5E9);
 
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<AuthProvider>().carregarUsuario();
+      }
+    });
+  }
+
   void _navegar(int indice) {
-  if (indice == 0) return;
+    if (indice == 0) return;
 
-  if (indice == 1) {
-    Navigator.push(
+    if (indice == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const DocumentosScreen()),
+      );
+      return;
+    }
+
+    if (indice == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const ConsultasScreen()),
+      );
+      return;
+    }
+
+    if (indice == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const ContaScreen()),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(
       context,
-      MaterialPageRoute(
-        builder: (_) => const DocumentosScreen(),
-      ),
-    );
-    return;
+    ).showSnackBar(const SnackBar(content: Text('Minha conta em breve!')));
   }
-
-  if (indice == 2) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const ConsultasScreen(),
-      ),
-    );
-    return;
-  }
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('Minha conta em breve!'),
-    ),
-  );
-}
 
   void _abrirFuncionalidade(String nome) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$nome estará disponível em breve!'),
-      ),
+      SnackBar(content: Text('$nome estará disponível em breve!')),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final usuario = context.watch<AuthProvider>();
+    final primeiroNome = usuario.nome?.trim().split(RegExp(r'\s+')).first;
+
     return Scaffold(
       backgroundColor: fundo,
       body: SafeArea(
@@ -70,18 +89,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: fundo,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(40),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
                 ),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(24, 28, 24, 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Olá, Isabella!',
-                        style: TextStyle(
+                      Text(
+                        usuario.temUsuario
+                            ? 'Olá, $primeiroNome!'
+                            : 'Bem-vindo(a) ao BEMI!',
+                        style: const TextStyle(
                           color: verde,
                           fontSize: 29,
                           fontWeight: FontWeight.bold,
@@ -125,12 +144,26 @@ class _HomeScreenState extends State<HomeScreen> {
                           AtalhoCard(
                             icone: Icons.notifications_none,
                             titulo: 'Avisos',
-                            onTap: () => _abrirFuncionalidade('Avisos'),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const AvisosScreen(),
+                                ),
+                              );
+                            },
                           ),
                           AtalhoCard(
                             icone: Icons.groups_outlined,
                             titulo: 'Família',
-                            onTap: () => _abrirFuncionalidade('Família'),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const FamiliaScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

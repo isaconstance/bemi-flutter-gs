@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import 'home_screen.dart';
 
 class CadastroScreen extends StatefulWidget {
   const CadastroScreen({super.key});
@@ -14,6 +17,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _confirmarSenhaController = TextEditingController();
+  final _sobrenomeController = TextEditingController();
 
   bool _mostrarSenha = false;
   bool _mostrarConfirmarSenha = false;
@@ -29,18 +33,26 @@ class _CadastroScreenState extends State<CadastroScreen> {
     _emailController.dispose();
     _senhaController.dispose();
     _confirmarSenhaController.dispose();
+    _sobrenomeController.dispose();
     super.dispose();
   }
 
-  void _criarConta() {
+  Future<void> _criarConta() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('O cadastro será conectado em breve!'),
-      ),
+    await context.read<AuthProvider>().cadastrar(
+      nome: '${_nomeController.text.trim()} ${_sobrenomeController.text.trim()}',
+      email: _emailController.text,
+    );
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+      (route) => false,
     );
   }
 
@@ -50,10 +62,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
       backgroundColor: fundo,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 32,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Form(
             key: _formKey,
             child: Column(
@@ -85,10 +94,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
 
                 const Text(
                   'Vamos criar sua conta?',
-                  style: TextStyle(
-                    color: texto,
-                    fontSize: 21,
-                  ),
+                  style: TextStyle(color: texto, fontSize: 21),
                 ),
 
                 const SizedBox(height: 24),
@@ -97,10 +103,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   child: Text(
                     'Preencha seus dados para começar.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: texto,
-                      fontSize: 19,
-                    ),
+                    style: TextStyle(color: texto, fontSize: 19),
                   ),
                 ),
 
@@ -109,16 +112,25 @@ class _CadastroScreenState extends State<CadastroScreen> {
                 TextFormField(
                   controller: _nomeController,
                   textCapitalization: TextCapitalization.words,
-                  decoration: _decoracaoCampo('Nome completo'),
+                  decoration: _decoracaoCampo('Nome'),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Informe seu nome completo';
+                      return 'Informe seu nome';
                     }
+                    return null;
+                  },
+                ),
 
-                    if (value.trim().split(' ').length < 2) {
-                      return 'Informe seu nome e sobrenome';
+                const SizedBox(height: 24),
+
+                TextFormField(
+                  controller: _sobrenomeController,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: _decoracaoCampo('Sobrenome'),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Informe seu sobrenome';
                     }
-
                     return null;
                   },
                 ),
@@ -156,9 +168,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         });
                       },
                       icon: Icon(
-                        _mostrarSenha
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                        _mostrarSenha ? Icons.visibility_off : Icons.visibility,
                         color: const Color(0xFF514B55),
                         size: 26,
                       ),
@@ -187,8 +197,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     sufixo: IconButton(
                       onPressed: () {
                         setState(() {
-                          _mostrarConfirmarSenha =
-                              !_mostrarConfirmarSenha;
+                          _mostrarConfirmarSenha = !_mostrarConfirmarSenha;
                         });
                       },
                       icon: Icon(
@@ -247,10 +256,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     children: [
                       const Text(
                         'Já tem uma conta? ',
-                        style: TextStyle(
-                          color: texto,
-                          fontSize: 17,
-                        ),
+                        style: TextStyle(color: texto, fontSize: 17),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context),
@@ -274,47 +280,27 @@ class _CadastroScreenState extends State<CadastroScreen> {
     );
   }
 
-  InputDecoration _decoracaoCampo(
-    String titulo, {
-    Widget? sufixo,
-  }) {
+  InputDecoration _decoracaoCampo(String titulo, {Widget? sufixo}) {
     return InputDecoration(
       hintText: titulo,
-      hintStyle: const TextStyle(
-        color: Color(0xFF514B55),
-        fontSize: 19,
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 25,
-      ),
+      hintStyle: const TextStyle(color: Color(0xFF514B55), fontSize: 19),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
       suffixIcon: sufixo,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(
-          color: borda,
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: borda, width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(
-          color: verde,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: verde, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(
-          color: Colors.red,
-        ),
+        borderSide: const BorderSide(color: Colors.red),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: Colors.red, width: 2),
       ),
     );
   }
