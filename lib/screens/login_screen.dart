@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'cadastro_screen.dart';
-import 'home_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_theme.dart';
+import 'cadastro_screen.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,11 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _mostrarSenha = false;
 
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundo = Color(0xFFFFF5E9);
-  static const Color texto = Color(0xFF6B716A);
-  static const Color borda = Color(0xFF88818A);
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -32,40 +28,42 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _entrar() async {
-  if (!_formKey.currentState!.validate()) {
-    return;
-  }
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
-  final authProvider = context.read<AuthProvider>();
+    final authProvider = context.read<AuthProvider>();
 
-  await authProvider.carregarUsuario();
+    await authProvider.carregarUsuario();
 
-  if (!mounted) return;
+    if (!mounted) return;
 
-  final emailDigitado = _emailController.text.trim().toLowerCase();
-  final emailCadastrado = authProvider.email?.trim().toLowerCase();
+    final emailDigitado = _emailController.text.trim().toLowerCase();
+    final emailCadastrado = authProvider.email?.trim().toLowerCase();
 
-  if (emailCadastrado == null || emailDigitado != emailCadastrado) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('E-mail não encontrado. Verifique seus dados ou cadastre-se.'),
+    if (emailCadastrado == null || emailDigitado != emailCadastrado) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'E-mail não encontrado. Verifique seus dados ou cadastre-se.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const HomeScreen(),
       ),
     );
-    return;
   }
-
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (_) => const HomeScreen(),
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -87,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       icon: const Icon(
                         Icons.arrow_back,
-                        color: verde,
+                        color: AppColors.verde,
                         size: 32,
                       ),
                     ),
@@ -95,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text(
                       'BEMI',
                       style: TextStyle(
-                        color: verde,
+                        color: AppColors.verde,
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                       ),
@@ -108,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   'Que bom ter você de volta!',
                   style: TextStyle(
-                    color: texto,
+                    color: AppColors.textoSecundario,
                     fontSize: 21,
                   ),
                 ),
@@ -120,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Entre na sua conta para acessar suas informações.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: texto,
+                      color: AppColors.textoSecundario,
                       fontSize: 19,
                       height: 1.5,
                     ),
@@ -163,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         _mostrarSenha
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: const Color(0xFF514B55),
+                        color: AppColors.pretoSecundario,
                         size: 26,
                       ),
                     ),
@@ -185,8 +183,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: _entrar,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: verde,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.verde,
+                      foregroundColor: AppColors.branco,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(22),
@@ -212,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Text(
                         'Ainda não tem uma conta? ',
                         style: TextStyle(
-                          color: texto,
+                          color: AppColors.textoSecundario,
                           fontSize: 17,
                         ),
                       ),
@@ -228,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text(
                           'Cadastre-se',
                           style: TextStyle(
-                            color: verde,
+                            color: AppColors.verde,
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
@@ -252,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return InputDecoration(
       hintText: titulo,
       hintStyle: const TextStyle(
-        color: Color(0xFF514B55),
+        color: AppColors.pretoSecundario,
         fontSize: 19,
       ),
       contentPadding: const EdgeInsets.symmetric(
@@ -263,27 +261,27 @@ class _LoginScreenState extends State<LoginScreen> {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
         borderSide: const BorderSide(
-          color: borda,
+          color: AppColors.cinza,
           width: 1.5,
         ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
         borderSide: const BorderSide(
-          color: verde,
+          color: AppColors.verde,
           width: 2,
         ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
         borderSide: const BorderSide(
-          color: Colors.red,
+          color: AppColors.vermelho,
         ),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
         borderSide: const BorderSide(
-          color: Colors.red,
+          color: AppColors.vermelho,
           width: 2,
         ),
       ),

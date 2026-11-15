@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/documento.dart';
 import '../providers/documento_provider.dart';
+import '../theme/app_theme.dart';
 import 'documento_form_screen.dart';
 
 class DocumentosScreen extends StatefulWidget {
@@ -12,14 +13,10 @@ class DocumentosScreen extends StatefulWidget {
 }
 
 class _DocumentosScreenState extends State<DocumentosScreen> {
-  static const Color verde = Color(0xFF174F3B);
-  static const Color verdeClaro = Color(0xFFE8ECD9);
-  static const Color dourado = Color(0xFFF2C879);
-  static const Color fundo = Color(0xFFF8F8F3);
-
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DocumentoProvider>().carregarDocumentos();
     });
@@ -30,10 +27,10 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
     final provider = context.watch<DocumentoProvider>();
 
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundoDocumentos,
       appBar: AppBar(
-        backgroundColor: fundo,
-        foregroundColor: verde,
+        backgroundColor: AppColors.fundoDocumentos,
+        foregroundColor: AppColors.verde,
         elevation: 0,
         title: const Text(
           'Meus documentos',
@@ -47,7 +44,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
   Widget _conteudo(DocumentoProvider provider) {
     if (provider.carregando && provider.documentos.isEmpty) {
       return const Center(
-        child: CircularProgressIndicator(color: verde),
+        child: CircularProgressIndicator(color: AppColors.verde),
       );
     }
 
@@ -58,7 +55,11 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: verde),
+              const Icon(
+                Icons.error_outline,
+                size: 48,
+                color: AppColors.verde,
+              ),
               const SizedBox(height: 12),
               const Text(
                 'Não foi possível carregar seus documentos.',
@@ -81,14 +82,17 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
         .length;
 
     return RefreshIndicator(
-      color: verde,
+      color: AppColors.verde,
       onRefresh: provider.carregarDocumentos,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
         children: [
           const Text(
             'Tenha seus documentos sempre organizados.',
-            style: TextStyle(fontSize: 17, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 17,
+              color: AppColors.pretoSecundario,
+            ),
           ),
           const SizedBox(height: 22),
 
@@ -100,11 +104,17 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
             icon: const Icon(Icons.add, size: 24),
             label: const Text(
               'Adicionar documento',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             style: OutlinedButton.styleFrom(
-              foregroundColor: verde,
-              side: const BorderSide(color: verde, width: 1.5),
+              foregroundColor: AppColors.verde,
+              side: const BorderSide(
+                color: AppColors.verde,
+                width: 1.5,
+              ),
               minimumSize: const Size(double.infinity, 58),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
@@ -117,7 +127,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
           const Text(
             'Seus documentos',
             style: TextStyle(
-              color: verde,
+              color: AppColors.verde,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -137,12 +147,16 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: verdeClaro,
+        color: AppColors.verdeClaro,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
         children: [
-          const Icon(Icons.description_outlined, color: verde, size: 42),
+          const Icon(
+            Icons.description_outlined,
+            color: AppColors.verde,
+            size: 42,
+          ),
           const SizedBox(width: 18),
           Expanded(
             child: Column(
@@ -151,7 +165,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
                 Text(
                   '$total ${total == 1 ? 'documento cadastrado' : 'documentos cadastrados'}',
                   style: const TextStyle(
-                    color: verde,
+                    color: AppColors.verde,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -178,7 +192,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.branco,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -195,7 +209,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
             children: [
               const Icon(
                 Icons.description_outlined,
-                color: verde,
+                color: AppColors.verde,
                 size: 34,
               ),
               const SizedBox(width: 12),
@@ -203,7 +217,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
                 child: Text(
                   documento.tipo,
                   style: const TextStyle(
-                    color: verde,
+                    color: AppColors.verde,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -217,11 +231,16 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
 
           Row(
             children: [
-              const Icon(Icons.calendar_today_outlined, size: 17, color: Colors.black54),
+              const Icon(
+                Icons.calendar_today_outlined,
+                size: 17,
+                color: AppColors.pretoSuave,
+              ),
               const SizedBox(width: 7),
               Expanded(
                 child: Text(
-                  documento.validade == null || documento.validade!.isEmpty
+                  documento.validade == null ||
+                          documento.validade!.isEmpty
                       ? 'Sem validade definida'
                       : 'Validade: ${_formatarData(documento.validade!)}',
                   style: const TextStyle(fontSize: 15),
@@ -251,7 +270,10 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
             const SizedBox(height: 14),
             Text(
               documento.observacao,
-              style: const TextStyle(fontSize: 15, color: Colors.black87),
+              style: const TextStyle(
+                fontSize: 15,
+                color: AppColors.pretoSecundario,
+              ),
             ),
           ],
 
@@ -265,11 +287,17 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
               icon: const Icon(Icons.description_outlined),
               label: const Text(
                 'Ver documento',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               style: OutlinedButton.styleFrom(
-                foregroundColor: verde,
-                side: const BorderSide(color: verde, width: 1.3),
+                foregroundColor: AppColors.verde,
+                side: const BorderSide(
+                  color: AppColors.verde,
+                  width: 1.3,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -283,7 +311,10 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
 
   Widget _menuDocumento(Documento documento) {
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.more_vert, color: verde),
+      icon: const Icon(
+        Icons.more_vert,
+        color: AppColors.verde,
+      ),
       onSelected: (opcao) {
         if (opcao == 'editar') {
           _editarDocumento(documento);
@@ -308,17 +339,24 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
     return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: verdeClaro,
+        color: AppColors.verdeClaro,
         borderRadius: BorderRadius.circular(22),
       ),
       child: const Column(
         children: [
-          Icon(Icons.folder_open, color: verde, size: 48),
+          Icon(
+            Icons.folder_open,
+            color: AppColors.verde,
+            size: 48,
+          ),
           SizedBox(height: 12),
           Text(
             'Você ainda não cadastrou documentos.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: verde),
+            style: TextStyle(
+              fontSize: 16,
+              color: AppColors.verde,
+            ),
           ),
         ],
       ),
@@ -328,21 +366,23 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
   Color _corStatus(String status) {
     switch (status.toLowerCase()) {
       case 'ok':
-        return const Color(0xFF287A4D);
+        return AppColors.verdeStatus;
       case 'pendente':
-        return const Color(0xFFB7791F);
+        return AppColors.douradoStatus;
       case 'vencido':
-        return const Color(0xFFC0392B);
+        return AppColors.vermelhoStatus;
       default:
-        return verde;
+        return AppColors.verde;
     }
   }
 
   String _formatarData(String data) {
     final partes = data.split('-');
+
     if (partes.length == 3) {
       return '${partes[2]}/${partes[1]}/${partes[0]}';
     }
+
     return data;
   }
 
@@ -370,8 +410,11 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
     showDialog<void>(
       context: context,
       builder: (dialogContext) => Dialog(
-        backgroundColor: Colors.white,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        backgroundColor: AppColors.branco,
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 32,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -385,7 +428,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
                 Text(
                   documento.tipo,
                   style: const TextStyle(
-                    color: Color(0xFF252D27),
+                    color: AppColors.textoTitulo,
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
@@ -398,7 +441,8 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
                           imagem,
                           width: double.infinity,
                           fit: BoxFit.contain,
-                          errorBuilder: (_, __, ___) => _imagemIndisponivel(),
+                          errorBuilder: (context, error, stackTrace) =>
+                              _imagemIndisponivel(),
                         )
                       : _imagemIndisponivel(),
                 ),
@@ -406,7 +450,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
                 const Text(
                   'Imagem ilustrativa para demonstração.',
                   style: TextStyle(
-                    color: Color(0xFF68736A),
+                    color: AppColors.textoSecundario,
                     fontSize: 15,
                   ),
                 ),
@@ -418,7 +462,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
                     child: const Text(
                       'Fechar',
                       style: TextStyle(
-                        color: verde,
+                        color: AppColors.verde,
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
                       ),
@@ -437,11 +481,15 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
     return Container(
       width: double.infinity,
       height: 190,
-      color: verdeClaro,
+      color: AppColors.verdeClaro,
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.description_outlined, color: verde, size: 65),
+          Icon(
+            Icons.description_outlined,
+            color: AppColors.verde,
+            size: 65,
+          ),
           SizedBox(height: 8),
           Text('Imagem ilustrativa indisponível'),
         ],
@@ -472,7 +520,9 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Excluir documento'),
-        content: Text('Deseja realmente excluir ${documento.tipo}?'),
+        content: Text(
+          'Deseja realmente excluir ${documento.tipo}?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -482,7 +532,7 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
             onPressed: () => Navigator.pop(dialogContext, true),
             child: const Text(
               'Excluir',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColors.vermelhoStatus),
             ),
           ),
         ],
@@ -491,18 +541,24 @@ class _DocumentosScreenState extends State<DocumentosScreen> {
 
     if (confirmar == true && mounted) {
       try {
-        await context.read<DocumentoProvider>().excluirDocumento(documento.id);
+        await context
+            .read<DocumentoProvider>()
+            .excluirDocumento(documento.id);
 
         if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Documento excluído com sucesso!')),
+          const SnackBar(
+            content: Text('Documento excluído com sucesso!'),
+          ),
         );
       } catch (e) {
         if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Erro ao excluir documento: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.vermelhoStatus,
           ),
         );
       }

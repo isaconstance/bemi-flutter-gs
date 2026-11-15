@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/consulta.dart';
 import '../providers/consulta_provider.dart';
-import '../widgets/app_bottom_navigation.dart';
-import 'home_screen.dart';
-import 'documentos_screen.dart';
+import '../theme/app_theme.dart';
 
 class ConsultasScreen extends StatefulWidget {
   const ConsultasScreen({super.key});
@@ -14,12 +12,6 @@ class ConsultasScreen extends StatefulWidget {
 }
 
 class _ConsultasScreenState extends State<ConsultasScreen> {
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundo = Color(0xFFF7F8F3);
-  static const Color verdeClaro = Color(0xFFE8ECD9);
-  static const Color dourado = Color(0xFFF2C879);
-
-
   @override
   void initState() {
     super.initState();
@@ -35,15 +27,15 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
     final provider = context.watch<ConsultaProvider>();
 
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       appBar: AppBar(
-        backgroundColor: fundo,
+        backgroundColor: AppColors.fundo,
         elevation: 0,
         centerTitle: false,
         title: const Text(
           'Minhas consultas',
           style: TextStyle(
-            color: verde,
+            color: AppColors.verde,
             fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
@@ -56,7 +48,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
   Widget _construirConteudo(ConsultaProvider provider) {
     if (provider.carregando && provider.consultas.isEmpty) {
       return const Center(
-        child: CircularProgressIndicator(color: verde),
+        child: CircularProgressIndicator(color: AppColors.verde),
       );
     }
 
@@ -66,7 +58,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
 
     if (provider.consultas.isEmpty) {
       return RefreshIndicator(
-        color: verde,
+        color: AppColors.verde,
         onRefresh: provider.carregarConsultas,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -75,7 +67,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
             Icon(
               Icons.calendar_month_outlined,
               size: 65,
-              color: verde,
+              color: AppColors.verde,
             ),
             SizedBox(height: 16),
             Center(
@@ -90,7 +82,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
     }
 
     return RefreshIndicator(
-      color: verde,
+      color: AppColors.verde,
       onRefresh: provider.carregarConsultas,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -100,13 +92,12 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
             'Acompanhe seus agendamentos e confira as informações '
             'das suas próximas consultas.',
             style: TextStyle(
-              color: Colors.black54,
+              color: AppColors.pretoSuave,
               fontSize: 14,
               height: 1.5,
             ),
           ),
           const SizedBox(height: 20),
-
           ...provider.consultas.map(
             (consulta) => _cardConsulta(consulta),
           ),
@@ -124,7 +115,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
           children: [
             const Icon(
               Icons.cloud_off_outlined,
-              color: verde,
+              color: AppColors.verde,
               size: 55,
             ),
             const SizedBox(height: 16),
@@ -140,8 +131,8 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
             ElevatedButton(
               onPressed: provider.carregarConsultas,
               style: ElevatedButton.styleFrom(
-                backgroundColor: verde,
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.verde,
+                foregroundColor: AppColors.branco,
               ),
               child: const Text('Tentar novamente'),
             ),
@@ -152,19 +143,20 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
   }
 
   Widget _cardConsulta(Consulta consulta) {
-    final confirmada =
-        consulta.status.toLowerCase() == 'confirmada';
+    final confirmada = consulta.status.toLowerCase() == 'confirmada';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 18),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.branco,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withOpacity(0.04)),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.04),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -180,7 +172,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
                 child: Text(
                   consulta.especialidade,
                   style: const TextStyle(
-                    color: verde,
+                    color: AppColors.verde,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -190,17 +182,13 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
               _statusChip(consulta.status, confirmada),
             ],
           ),
-
           const SizedBox(height: 18),
-
           _informacao(
             Icons.person_outline,
             'Médico(a)',
             consulta.medico,
           ),
-
           const SizedBox(height: 15),
-
           Row(
             children: [
               Expanded(
@@ -220,30 +208,24 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
               ),
             ],
           ),
-
           const SizedBox(height: 15),
-
           _informacao(
             Icons.local_hospital_outlined,
             'Local da consulta',
             consulta.local,
           ),
-
           const SizedBox(height: 15),
-
           _informacao(
             Icons.location_on_outlined,
             'Endereço',
             consulta.endereco.enderecoCompleto,
           ),
-
           const SizedBox(height: 18),
-
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(13),
             decoration: BoxDecoration(
-              color: verdeClaro.withOpacity(0.75),
+              color: AppColors.verdeClaro.withValues(alpha: 0.75),
               borderRadius: BorderRadius.circular(13),
             ),
             child: Row(
@@ -251,7 +233,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
               children: [
                 const Icon(
                   Icons.notifications_none,
-                  color: verde,
+                  color: AppColors.verde,
                   size: 21,
                 ),
                 const SizedBox(width: 10),
@@ -262,7 +244,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
                       const Text(
                         'Lembrete',
                         style: TextStyle(
-                          color: verde,
+                          color: AppColors.verde,
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
                         ),
@@ -273,7 +255,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
                             ? 'Nenhuma observação cadastrada.'
                             : consulta.observacao,
                         style: const TextStyle(
-                          color: Colors.black87,
+                          color: AppColors.pretoSecundario,
                           fontSize: 13,
                           height: 1.4,
                         ),
@@ -290,17 +272,19 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
   }
 
   Widget _statusChip(String status, bool confirmada) {
+    final pendente = status.toLowerCase() == 'pendente';
+
     final cor = confirmada
-        ? verde
-        : status.toLowerCase() == 'pendente'
-            ? const Color(0xFF9A6A16)
-            : Colors.grey.shade700;
+        ? AppColors.verde
+        : pendente
+            ? AppColors.douradoStatus
+            : AppColors.cinza;
 
     final fundoChip = confirmada
-        ? verdeClaro
-        : status.toLowerCase() == 'pendente'
-            ? const Color(0xFFFFF1D6)
-            : Colors.grey.shade200;
+        ? AppColors.verdeClaro
+        : pendente
+            ? AppColors.dourado.withValues(alpha: 0.25)
+            : AppColors.fundoDocumentos;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -332,7 +316,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
       children: [
         Icon(
           icone,
-          color: verde,
+          color: AppColors.verde,
           size: 20,
         ),
         const SizedBox(width: 10),
@@ -343,7 +327,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
               Text(
                 titulo,
                 style: const TextStyle(
-                  color: Colors.black54,
+                  color: AppColors.pretoSuave,
                   fontSize: 12,
                 ),
               ),
@@ -351,7 +335,7 @@ class _ConsultasScreenState extends State<ConsultasScreen> {
               Text(
                 valor.isEmpty ? 'Não informado' : valor,
                 style: const TextStyle(
-                  color: Colors.black87,
+                  color: AppColors.pretoSecundario,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   height: 1.4,

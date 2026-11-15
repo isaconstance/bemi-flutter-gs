@@ -4,6 +4,7 @@ import 'providers/documento_provider.dart';
 import 'screens/splash_screen.dart';
 import 'providers/consulta_provider.dart';
 import 'providers/auth_provider.dart';
+import 'package:bemi/theme/app_theme.dart';
 
 void main() {
   runApp(const BemiApp());
@@ -29,6 +30,7 @@ class BemiApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'BEMI',
+        theme: AppTheme.temaPrincipal,
         home: const SplashScreen(),
       ),
     );

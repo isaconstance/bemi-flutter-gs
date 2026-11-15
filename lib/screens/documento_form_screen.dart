@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/documento.dart';
 import '../providers/documento_provider.dart';
+import '../theme/app_theme.dart';
 
 class DocumentoFormScreen extends StatefulWidget {
   final Documento? documento;
@@ -16,10 +17,6 @@ class DocumentoFormScreen extends StatefulWidget {
 }
 
 class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
-  static const Color verde = Color(0xFF174F3B);
-  static const Color verdeClaro = Color(0xFFE8ECD9);
-  static const Color fundo = Color(0xFFF8F8F3);
-
   final _formKey = GlobalKey<FormState>();
   final _tipoController = TextEditingController();
   final _validadeController = TextEditingController();
@@ -61,10 +58,10 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hint,
-      prefixIcon: Icon(icone, color: verde),
+      prefixIcon: Icon(icone, color: AppColors.verde),
       suffixIcon: sufixo,
       filled: true,
-      fillColor: Colors.white,
+      fillColor: AppColors.branco,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 18,
         vertical: 18,
@@ -79,15 +76,23 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: verde, width: 1.5),
+        borderSide: const BorderSide(
+          color: AppColors.verde,
+          width: 1.5,
+        ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Colors.red),
+        borderSide: const BorderSide(
+          color: AppColors.vermelhoStatus,
+        ),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Colors.red, width: 1.5),
+        borderSide: const BorderSide(
+          color: AppColors.vermelhoStatus,
+          width: 1.5,
+        ),
       ),
     );
   }
@@ -108,10 +113,10 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: verde,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: verde,
+              primary: AppColors.verde,
+              onPrimary: AppColors.branco,
+              surface: AppColors.branco,
+              onSurface: AppColors.verde,
             ),
           ),
           child: child!,
@@ -127,16 +132,6 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
             '${dataSelecionada.day.toString().padLeft(2, '0')}';
       });
     }
-  }
-
-  String _formatarData(String data) {
-    final partes = data.split('-');
-
-    if (partes.length == 3) {
-      return '${partes[2]}/${partes[1]}/${partes[0]}';
-    }
-
-    return data;
   }
 
   Future<void> _salvarDocumento() async {
@@ -189,7 +184,7 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erro ao salvar documento: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.vermelhoStatus,
         ),
       );
     } finally {
@@ -202,10 +197,10 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       appBar: AppBar(
-        backgroundColor: fundo,
-        foregroundColor: verde,
+        backgroundColor: AppColors.fundo,
+        foregroundColor: AppColors.verde,
         elevation: 0,
         title: Text(
           _editando ? 'Editar documento' : 'Adicionar documento',
@@ -220,14 +215,14 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: verdeClaro,
+                color: AppColors.verdeClaro,
                 borderRadius: BorderRadius.circular(22),
               ),
               child: const Row(
                 children: [
                   Icon(
                     Icons.folder_shared_outlined,
-                    color: verde,
+                    color: AppColors.verde,
                     size: 38,
                   ),
                   SizedBox(width: 14),
@@ -235,7 +230,7 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
                     child: Text(
                       'Mantenha seus documentos organizados e suas informações sempre atualizadas.',
                       style: TextStyle(
-                        color: verde,
+                        color: AppColors.verde,
                         fontSize: 15,
                         height: 1.4,
                       ),
@@ -244,20 +239,16 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
                 ],
               ),
             ),
-
             const SizedBox(height: 28),
-
             const Text(
               'Informações do documento',
               style: TextStyle(
-                color: verde,
+                color: AppColors.verde,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 18),
-
             TextFormField(
               controller: _tipoController,
               textCapitalization: TextCapitalization.words,
@@ -273,9 +264,7 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
                 return null;
               },
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
               controller: _validadeController,
               readOnly: true,
@@ -295,64 +284,60 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
                             _validadeController.clear();
                           });
                         },
-                        icon: const Icon(Icons.close, color: Colors.grey),
+                        icon: const Icon(
+                          Icons.close,
+                          color: AppColors.cinza,
+                        ),
                       ),
                     IconButton(
                       tooltip: 'Selecionar data',
                       onPressed: _selecionarData,
                       icon: const Icon(
                         Icons.calendar_month_outlined,
-                        color: verde,
+                        color: AppColors.verde,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-
             const SizedBox(height: 26),
-
             const Text(
               'Situação do documento',
               style: TextStyle(
-                color: verde,
+                color: AppColors.verde,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 6),
-
             const Text(
               'Selecione a situação atual:',
-              style: TextStyle(color: Colors.black54, fontSize: 14),
+              style: TextStyle(
+                color: AppColors.pretoSuave,
+                fontSize: 14,
+              ),
             ),
-
             const SizedBox(height: 14),
-
             Wrap(
               spacing: 9,
               runSpacing: 10,
               children: [
-                _opcaoStatus('OK', const Color(0xFF287A4D)),
-                _opcaoStatus('Pendente', const Color(0xFFB7791F)),
-                _opcaoStatus('Vencido', const Color(0xFFC0392B)),
+                _opcaoStatus('OK', AppColors.verdeStatus),
+                _opcaoStatus('Pendente', AppColors.douradoStatus),
+                _opcaoStatus('Vencido', AppColors.vermelhoStatus),
               ],
             ),
-
             const SizedBox(height: 28),
-
             const Text(
               'Observações',
               style: TextStyle(
-                color: verde,
+                color: AppColors.verde,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 12),
-
             TextFormField(
               controller: _observacaoController,
               textCapitalization: TextCapitalization.sentences,
@@ -365,17 +350,16 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
                 alignLabelWithHint: true,
               ),
             ),
-
             const SizedBox(height: 32),
-
             SizedBox(
               height: 56,
               child: ElevatedButton(
                 onPressed: _salvando ? null : _salvarDocumento,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: verde,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor: verde.withValues(alpha: 0.5),
+                  backgroundColor: AppColors.verde,
+                  foregroundColor: AppColors.branco,
+                  disabledBackgroundColor:
+                      AppColors.verde.withValues(alpha: 0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(17),
                   ),
@@ -386,7 +370,7 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
                         height: 23,
                         width: 23,
                         child: CircularProgressIndicator(
-                          color: Colors.white,
+                          color: AppColors.branco,
                           strokeWidth: 2.5,
                         ),
                       )
@@ -424,14 +408,14 @@ class _DocumentoFormScreenState extends State<DocumentoFormScreen> {
         setState(() => _status = texto);
       },
       showCheckmark: true,
-      checkmarkColor: selecionado ? Colors.white : cor,
+      checkmarkColor: selecionado ? AppColors.branco : cor,
       selectedColor: cor,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.branco,
       side: BorderSide(
         color: selecionado ? cor : const Color(0xFFE1E6DF),
       ),
       labelStyle: TextStyle(
-        color: selecionado ? Colors.white : cor,
+        color: selecionado ? AppColors.branco : cor,
         fontWeight: FontWeight.bold,
       ),
       padding: const EdgeInsets.symmetric(

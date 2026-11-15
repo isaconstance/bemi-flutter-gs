@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class AssistenteCard extends StatelessWidget {
   const AssistenteCard({super.key});
-
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundoCard = Color(0xFFE8ECD9);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: fundoCard,
+        color: AppColors.verdeClaro,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -39,7 +37,7 @@ class AssistenteCard extends StatelessWidget {
                 child: Text(
                   'Como posso\nte ajudar hoje?',
                   style: TextStyle(
-                    color: verde,
+                    color: AppColors.verde,
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                     height: 1.3,
@@ -69,8 +67,8 @@ class AssistenteCard extends StatelessWidget {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: verde,
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.verde,
+                foregroundColor: AppColors.branco,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),

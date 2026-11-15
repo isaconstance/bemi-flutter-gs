@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../models/documento.dart';
 import '../providers/documento_provider.dart';
+import '../theme/app_theme.dart';
 import 'documento_form_screen.dart';
 
 class DocumentoDetalhesScreen extends StatefulWidget {
@@ -20,9 +20,6 @@ class DocumentoDetalhesScreen extends StatefulWidget {
 
 class _DocumentoDetalhesScreenState
     extends State<DocumentoDetalhesScreen> {
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundo = Color(0xFFFFF5E9);
-
   Future<void> _editarDocumento(Documento documento) async {
     await Navigator.push(
       context,
@@ -51,7 +48,7 @@ class _DocumentoDetalhesScreenState
             onPressed: () => Navigator.pop(context, true),
             child: const Text(
               'Excluir',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColors.vermelho),
             ),
           ),
         ],
@@ -80,7 +77,7 @@ class _DocumentoDetalhesScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erro ao excluir documento: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.vermelho,
         ),
       );
     }
@@ -92,13 +89,17 @@ class _DocumentoDetalhesScreenState
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.branco,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icone, color: verde, size: 25),
+          Icon(
+            icone,
+            color: AppColors.verde,
+            size: 25,
+          ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -107,7 +108,7 @@ class _DocumentoDetalhesScreenState
                 Text(
                   titulo,
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: AppColors.cinza,
                     fontSize: 14,
                   ),
                 ),
@@ -115,7 +116,7 @@ class _DocumentoDetalhesScreenState
                 Text(
                   valor,
                   style: const TextStyle(
-                    color: verde,
+                    color: AppColors.verde,
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
                   ),
@@ -138,11 +139,11 @@ class _DocumentoDetalhesScreenState
     );
 
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       appBar: AppBar(
         title: const Text('Detalhes do documento'),
-        backgroundColor: verde,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.verde,
+        foregroundColor: AppColors.branco,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(22),
@@ -153,12 +154,12 @@ class _DocumentoDetalhesScreenState
               child: Container(
                 padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8ECD9),
+                  color: AppColors.verdeClaro,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: const Icon(
                   Icons.description_outlined,
-                  color: verde,
+                  color: AppColors.verde,
                   size: 65,
                 ),
               ),
@@ -170,7 +171,7 @@ class _DocumentoDetalhesScreenState
               child: Text(
                 documento.tipo,
                 style: const TextStyle(
-                  color: verde,
+                  color: AppColors.verde,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                 ),
@@ -182,7 +183,7 @@ class _DocumentoDetalhesScreenState
             const Text(
               'Informações do documento',
               style: TextStyle(
-                color: verde,
+                color: AppColors.verde,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -237,8 +238,8 @@ class _DocumentoDetalhesScreenState
                   style: TextStyle(fontSize: 17),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: verde,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.verde,
+                  foregroundColor: AppColors.branco,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -259,8 +260,10 @@ class _DocumentoDetalhesScreenState
                   style: TextStyle(fontSize: 17),
                 ),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
+                  foregroundColor: AppColors.vermelho,
+                  side: const BorderSide(
+                    color: AppColors.vermelho,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),

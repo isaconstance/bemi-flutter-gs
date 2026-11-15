@@ -1,12 +1,9 @@
+
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class FamiliaScreen extends StatelessWidget {
   const FamiliaScreen({super.key});
-
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundo = Color(0xFFFFF5E9);
-  static const Color verdeClaro = Color(0xFFE8ECD9);
-  static const Color vermelho = Color(0xFFE53935);
 
   final List<Map<String, String>> contatos = const [
     {'nome': 'Ana', 'telefone': '(11) 00000-0000'},
@@ -21,11 +18,11 @@ class FamiliaScreen extends StatelessWidget {
         vertical: 20,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.branco,
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.10),
+            color: Colors.black.withValues(alpha: 0.10),
             blurRadius: 7,
             offset: const Offset(0, 3),
           ),
@@ -35,10 +32,10 @@ class FamiliaScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 27,
-            backgroundColor: verdeClaro,
+            backgroundColor: AppColors.verdeClaro,
             child: const Icon(
               Icons.person_outline,
-              color: verde,
+              color: AppColors.verde,
               size: 32,
             ),
           ),
@@ -52,7 +49,7 @@ class FamiliaScreen extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF252B25),
+                    color: AppColors.textoTitulo,
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -60,7 +57,7 @@ class FamiliaScreen extends StatelessWidget {
                   contato['telefone']!,
                   style: const TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF70786F),
+                    color: AppColors.textoSecundario,
                   ),
                 ),
               ],
@@ -69,8 +66,8 @@ class FamiliaScreen extends StatelessWidget {
           IconButton(
             onPressed: () {},
             style: IconButton.styleFrom(
-              backgroundColor: verde,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.verde,
+              foregroundColor: AppColors.branco,
               minimumSize: const Size(54, 54),
             ),
             icon: const Icon(Icons.phone),
@@ -83,10 +80,10 @@ class FamiliaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       appBar: AppBar(
-        backgroundColor: fundo,
-        foregroundColor: verde,
+        backgroundColor: AppColors.fundo,
+        foregroundColor: AppColors.verde,
         elevation: 0,
         title: const Text(
           'Meus Contatos',
@@ -104,14 +101,14 @@ class FamiliaScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFFFBE5E2),
+                color: AppColors.vermelhoEmergencia.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(22),
               ),
               child: const Row(
                 children: [
                   Icon(
                     Icons.warning_amber_rounded,
-                    color: vermelho,
+                    color: AppColors.vermelhoEmergencia,
                     size: 38,
                   ),
                   SizedBox(width: 16),
@@ -119,7 +116,7 @@ class FamiliaScreen extends StatelessWidget {
                     child: Text(
                       'Este aplicativo não substitui os serviços oficiais de emergência.',
                       style: TextStyle(
-                        color: Color(0xFF963B32),
+                        color: AppColors.vermelhoStatus,
                         fontSize: 16,
                       ),
                     ),
@@ -133,7 +130,7 @@ class FamiliaScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF252B25),
+                color: AppColors.textoTitulo,
               ),
             ),
             const SizedBox(height: 20),
@@ -145,7 +142,7 @@ class FamiliaScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(22),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.branco,
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Row(
@@ -159,14 +156,14 @@ class FamiliaScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF252B25),
+                            color: AppColors.textoTitulo,
                           ),
                         ),
                         const SizedBox(height: 14),
                         const Text(
                           'SAMU · 192',
                           style: TextStyle(
-                            color: vermelho,
+                            color: AppColors.vermelhoEmergencia,
                             fontSize: 27,
                             fontWeight: FontWeight.bold,
                           ),
@@ -175,7 +172,7 @@ class FamiliaScreen extends StatelessWidget {
                         Text(
                           'Serviço de atendimento móvel de urgência',
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: AppColors.cinza,
                             fontSize: 14,
                           ),
                         ),
@@ -186,8 +183,8 @@ class FamiliaScreen extends StatelessWidget {
                   IconButton(
                     onPressed: () {},
                     style: IconButton.styleFrom(
-                      backgroundColor: vermelho,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.vermelhoEmergencia,
+                      foregroundColor: AppColors.branco,
                       minimumSize: const Size(62, 62),
                     ),
                     icon: const Icon(
@@ -196,17 +193,6 @@ class FamiliaScreen extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            Text(
-              'Ao tocar no telefone, você poderá confirmar a ligação no aplicativo de chamadas.',
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 15,
-                height: 1.5,
               ),
             ),
           ],

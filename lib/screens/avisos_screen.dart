@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/consulta.dart';
 import '../providers/consulta_provider.dart';
+import '../theme/app_theme.dart';
 
 class AvisosScreen extends StatefulWidget {
   const AvisosScreen({super.key});
@@ -11,14 +12,6 @@ class AvisosScreen extends StatefulWidget {
 }
 
 class _AvisosScreenState extends State<AvisosScreen> {
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundo = Color(0xFFFFF5E9);
-  static const Color verdeClaro = Color(0xFFE8ECD9);
-  static const Color vermelho = Color(0xFFCF332D);
-  static const Color vermelhoClaro = Color(0xFFFBE5E2);
-  static const Color texto = Color(0xFF292F29);
-  static const Color textoSecundario = Color(0xFF6B716A);
-
   @override
   void initState() {
     super.initState();
@@ -34,25 +27,29 @@ class _AvisosScreenState extends State<AvisosScreen> {
     final provider = context.watch<ConsultaProvider>();
 
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       appBar: AppBar(
-        backgroundColor: fundo,
+        backgroundColor: AppColors.fundo,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: verde, size: 30),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: AppColors.verde,
+            size: 30,
+          ),
         ),
         title: const Text(
           'Meus avisos',
           style: TextStyle(
-            color: verde,
+            color: AppColors.verde,
             fontSize: 27,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       body: RefreshIndicator(
-        color: verde,
+        color: AppColors.verde,
         onRefresh: provider.carregarConsultas,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -61,22 +58,20 @@ class _AvisosScreenState extends State<AvisosScreen> {
             const Text(
               'Fique por dentro de informações importantes.',
               style: TextStyle(
-                color: textoSecundario,
+                color: AppColors.textoSecundario,
                 fontSize: 17,
               ),
             ),
-
             const SizedBox(height: 28),
-
             _resumoAvisos(provider.consultas.length),
-
             const SizedBox(height: 28),
-
             if (provider.carregando && provider.consultas.isEmpty)
               const Padding(
                 padding: EdgeInsets.all(40),
                 child: Center(
-                  child: CircularProgressIndicator(color: verde),
+                  child: CircularProgressIndicator(
+                    color: AppColors.verde,
+                  ),
                 ),
               )
             else if (provider.erro != null && provider.consultas.isEmpty)
@@ -88,9 +83,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
                 (consulta) => _cardConsulta(consulta),
               ),
             ],
-
             const SizedBox(height: 8),
-
             _avisoSeguranca(),
           ],
         ),
@@ -102,14 +95,14 @@ class _AvisosScreenState extends State<AvisosScreen> {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: verdeClaro,
+        color: AppColors.verdeClaro,
         borderRadius: BorderRadius.circular(25),
       ),
       child: Row(
         children: [
           const Icon(
             Icons.notifications_active_outlined,
-            color: verde,
+            color: AppColors.verde,
             size: 42,
           ),
           const SizedBox(width: 18),
@@ -119,10 +112,10 @@ class _AvisosScreenState extends State<AvisosScreen> {
               children: [
                 Text(
                   quantidade == 1
-                      ? '1 aviso de consulta'
-                      : '$quantidade avisos de consultas',
+                      ? '1 consulta cadastrada'
+                      : '$quantidade consultas cadastradas',
                   style: const TextStyle(
-                    color: verde,
+                    color: AppColors.verde,
                     fontSize: 21,
                     fontWeight: FontWeight.bold,
                   ),
@@ -131,7 +124,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
                 const Text(
                   'Confira os lembretes abaixo.',
                   style: TextStyle(
-                    color: texto,
+                    color: AppColors.textoEscuro,
                     fontSize: 16,
                   ),
                 ),
@@ -147,7 +140,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: verdeClaro,
+        color: AppColors.verdeClaro,
         borderRadius: BorderRadius.circular(25),
       ),
       child: Theme(
@@ -161,17 +154,17 @@ class _AvisosScreenState extends State<AvisosScreen> {
             vertical: 12,
           ),
           childrenPadding: const EdgeInsets.fromLTRB(22, 0, 22, 22),
-          iconColor: verde,
-          collapsedIconColor: verde,
+          iconColor: AppColors.verde,
+          collapsedIconColor: AppColors.verde,
           leading: const Icon(
             Icons.calendar_month_outlined,
-            color: verde,
+            color: AppColors.verde,
             size: 34,
           ),
           title: const Text(
-            'Consulta próxima',
+            'Consulta cadastrada',
             style: TextStyle(
-              color: texto,
+              color: AppColors.textoEscuro,
               fontSize: 19,
               fontWeight: FontWeight.bold,
             ),
@@ -181,7 +174,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
             child: Text(
               'Você tem consulta de ${consulta.especialidade} em ${_formatarData(consulta.data)}.',
               style: const TextStyle(
-                color: texto,
+                color: AppColors.textoEscuro,
                 fontSize: 16,
                 height: 1.5,
               ),
@@ -216,7 +209,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
           Text(
             '$titulo: ',
             style: const TextStyle(
-              color: verde,
+              color: AppColors.verde,
               fontWeight: FontWeight.bold,
               fontSize: 15,
             ),
@@ -225,7 +218,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
             child: Text(
               valor.isEmpty ? 'Não informado' : valor,
               style: const TextStyle(
-                color: texto,
+                color: AppColors.textoEscuro,
                 fontSize: 15,
                 height: 1.4,
               ),
@@ -240,7 +233,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: vermelhoClaro,
+        color: AppColors.vermelhoEmergencia.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(25),
       ),
       child: const Column(
@@ -250,7 +243,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
             children: [
               Icon(
                 Icons.shield_outlined,
-                color: vermelho,
+                color: AppColors.vermelhoEmergencia,
                 size: 34,
               ),
               SizedBox(width: 14),
@@ -258,7 +251,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
                 child: Text(
                   'Cuidado com golpes!',
                   style: TextStyle(
-                    color: texto,
+                    color: AppColors.textoEscuro,
                     fontSize: 19,
                     fontWeight: FontWeight.bold,
                   ),
@@ -272,7 +265,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
             'Desconfie de contatos que solicitam pagamentos ou dados pessoais '
             'em nome de instituições de saúde.',
             style: TextStyle(
-              color: texto,
+              color: AppColors.textoEscuro,
               fontSize: 16,
               height: 1.5,
             ),
@@ -286,22 +279,22 @@ class _AvisosScreenState extends State<AvisosScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: verdeClaro,
+        color: AppColors.verdeClaro,
         borderRadius: BorderRadius.circular(24),
       ),
       child: const Column(
         children: [
           Icon(
             Icons.event_available_outlined,
-            color: verde,
+            color: AppColors.verde,
             size: 45,
           ),
           SizedBox(height: 12),
           Text(
-            'Nenhum aviso de consulta no momento.',
+            'Nenhuma consulta cadastrada no momento.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: verde,
+              color: AppColors.verde,
               fontSize: 17,
               fontWeight: FontWeight.bold,
             ),
@@ -315,14 +308,14 @@ class _AvisosScreenState extends State<AvisosScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: verdeClaro,
+        color: AppColors.verdeClaro,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
         children: [
           const Icon(
             Icons.cloud_off_outlined,
-            color: verde,
+            color: AppColors.verde,
             size: 42,
           ),
           const SizedBox(height: 12),
@@ -335,8 +328,8 @@ class _AvisosScreenState extends State<AvisosScreen> {
           ElevatedButton(
             onPressed: provider.carregarConsultas,
             style: ElevatedButton.styleFrom(
-              backgroundColor: verde,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.verde,
+              foregroundColor: AppColors.branco,
             ),
             child: const Text('Tentar novamente'),
           ),

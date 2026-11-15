@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_theme.dart';
 import 'home_screen.dart';
 
 class CadastroScreen extends StatefulWidget {
@@ -21,11 +22,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
 
   bool _mostrarSenha = false;
   bool _mostrarConfirmarSenha = false;
-
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundo = Color(0xFFFFF5E9);
-  static const Color texto = Color(0xFF6B716A);
-  static const Color borda = Color(0xFF88818A);
 
   @override
   void dispose() {
@@ -59,7 +55,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -74,7 +70,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(
                         Icons.arrow_back,
-                        color: verde,
+                        color: AppColors.verde,
                         size: 32,
                       ),
                     ),
@@ -82,7 +78,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     const Text(
                       'BEMI',
                       style: TextStyle(
-                        color: verde,
+                        color: AppColors.verde,
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                       ),
@@ -94,7 +90,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
 
                 const Text(
                   'Vamos criar sua conta?',
-                  style: TextStyle(color: texto, fontSize: 21),
+                  style: TextStyle(
+                    color: AppColors.textoSecundario,
+                    fontSize: 21,
+                  ),
                 ),
 
                 const SizedBox(height: 24),
@@ -103,7 +102,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   child: Text(
                     'Preencha seus dados para começar.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: texto, fontSize: 19),
+                    style: TextStyle(
+                      color: AppColors.textoSecundario,
+                      fontSize: 19,
+                    ),
                   ),
                 ),
 
@@ -168,8 +170,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         });
                       },
                       icon: Icon(
-                        _mostrarSenha ? Icons.visibility_off : Icons.visibility,
-                        color: const Color(0xFF514B55),
+                        _mostrarSenha
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: AppColors.pretoSecundario,
                         size: 26,
                       ),
                     ),
@@ -197,14 +201,15 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     sufixo: IconButton(
                       onPressed: () {
                         setState(() {
-                          _mostrarConfirmarSenha = !_mostrarConfirmarSenha;
+                          _mostrarConfirmarSenha =
+                              !_mostrarConfirmarSenha;
                         });
                       },
                       icon: Icon(
                         _mostrarConfirmarSenha
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: const Color(0xFF514B55),
+                        color: AppColors.pretoSecundario,
                         size: 26,
                       ),
                     ),
@@ -230,8 +235,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   child: ElevatedButton(
                     onPressed: _criarConta,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: verde,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.verde,
+                      foregroundColor: AppColors.branco,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(22),
@@ -256,14 +261,17 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     children: [
                       const Text(
                         'Já tem uma conta? ',
-                        style: TextStyle(color: texto, fontSize: 17),
+                        style: TextStyle(
+                          color: AppColors.textoSecundario,
+                          fontSize: 17,
+                        ),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context),
                         child: const Text(
                           'Entrar',
                           style: TextStyle(
-                            color: verde,
+                            color: AppColors.verde,
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
@@ -283,24 +291,39 @@ class _CadastroScreenState extends State<CadastroScreen> {
   InputDecoration _decoracaoCampo(String titulo, {Widget? sufixo}) {
     return InputDecoration(
       hintText: titulo,
-      hintStyle: const TextStyle(color: Color(0xFF514B55), fontSize: 19),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+      hintStyle: const TextStyle(
+        color: AppColors.pretoSecundario,
+        fontSize: 19,
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 25,
+      ),
       suffixIcon: sufixo,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(color: borda, width: 1.5),
+        borderSide: const BorderSide(
+          color: AppColors.cinza,
+          width: 1.5,
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(color: verde, width: 2),
+        borderSide: const BorderSide(
+          color: AppColors.verde,
+          width: 2,
+        ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(color: Colors.red),
+        borderSide: const BorderSide(color: AppColors.vermelho),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(23),
-        borderSide: const BorderSide(color: Colors.red, width: 2),
+        borderSide: const BorderSide(
+          color: AppColors.vermelho,
+          width: 2,
+        ),
       ),
     );
   }

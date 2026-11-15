@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_theme.dart';
 import 'login_screen.dart';
 
 class ContaScreen extends StatelessWidget {
   const ContaScreen({super.key});
-
-  static const Color verde = Color(0xFF174F3B);
-  static const Color fundo = Color(0xFFFFF5E9);
-  static const Color verdeClaro = Color(0xFFE8ECD9);
-  static const Color texto = Color(0xFF292F29);
-  static const Color textoSecundario = Color(0xFF6B716A);
 
   Future<void> _sair(BuildContext context) async {
     await context.read<AuthProvider>().sair();
@@ -38,7 +33,7 @@ class ContaScreen extends StatelessWidget {
     final primeiroNome = usuario.nome?.trim().split(RegExp(r'\s+')).first;
 
     return Scaffold(
-      backgroundColor: fundo,
+      backgroundColor: AppColors.fundo,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 32, 24, 40),
@@ -51,7 +46,7 @@ class ContaScreen extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(
                       Icons.arrow_back,
-                      color: verde,
+                      color: AppColors.verde,
                       size: 32,
                     ),
                   ),
@@ -59,7 +54,7 @@ class ContaScreen extends StatelessWidget {
                   const Text(
                     'Minha conta',
                     style: TextStyle(
-                      color: verde,
+                      color: AppColors.verde,
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
@@ -73,7 +68,7 @@ class ContaScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: verdeClaro,
+                  color: AppColors.verdeClaro,
                   borderRadius: BorderRadius.circular(32),
                 ),
                 child: Column(
@@ -82,10 +77,10 @@ class ContaScreen extends StatelessWidget {
                       children: [
                         const CircleAvatar(
                           radius: 43,
-                          backgroundColor: Colors.white,
+                          backgroundColor: AppColors.branco,
                           child: Icon(
                             Icons.person_outline,
-                            color: verde,
+                            color: AppColors.verde,
                             size: 48,
                           ),
                         ),
@@ -99,7 +94,7 @@ class ContaScreen extends StatelessWidget {
                                     ? 'Olá, $primeiroNome!'
                                     : 'Bem-vindo(a)!',
                                 style: const TextStyle(
-                                  color: verde,
+                                  color: AppColors.verde,
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -108,7 +103,7 @@ class ContaScreen extends StatelessWidget {
                               const Text(
                                 'Sua conta está conectada ao BEMI.',
                                 style: TextStyle(
-                                  color: textoSecundario,
+                                  color: AppColors.textoSecundario,
                                   fontSize: 16,
                                 ),
                               ),
@@ -117,7 +112,7 @@ class ContaScreen extends StatelessWidget {
                                 Text(
                                   usuario.email!,
                                   style: const TextStyle(
-                                    color: textoSecundario,
+                                    color: AppColors.textoSecundario,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -136,8 +131,8 @@ class ContaScreen extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () => _sair(context),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: verde,
-                          foregroundColor: Colors.white,
+                          backgroundColor: AppColors.verde,
+                          foregroundColor: AppColors.branco,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(22),
@@ -161,7 +156,7 @@ class ContaScreen extends StatelessWidget {
               const Text(
                 'Personalização',
                 style: TextStyle(
-                  color: verde,
+                  color: AppColors.verde,
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
@@ -195,7 +190,7 @@ class ContaScreen extends StatelessWidget {
               const Text(
                 'Sobre o aplicativo',
                 style: TextStyle(
-                  color: verde,
+                  color: AppColors.verde,
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
@@ -234,10 +229,10 @@ class ContaScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 31,
-              backgroundColor: verdeClaro,
+              backgroundColor: AppColors.verdeClaro,
               child: Icon(
                 icone,
-                color: verde,
+                color: AppColors.verde,
                 size: 30,
               ),
             ),
@@ -249,7 +244,7 @@ class ContaScreen extends StatelessWidget {
                   Text(
                     titulo,
                     style: const TextStyle(
-                      color: texto,
+                      color: AppColors.textoEscuro,
                       fontSize: 19,
                       fontWeight: FontWeight.bold,
                     ),
@@ -258,7 +253,7 @@ class ContaScreen extends StatelessWidget {
                   Text(
                     subtitulo,
                     style: const TextStyle(
-                      color: textoSecundario,
+                      color: AppColors.textoSecundario,
                       fontSize: 16,
                     ),
                   ),

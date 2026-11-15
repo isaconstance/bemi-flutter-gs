@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class AtalhoCard extends StatelessWidget {
   final IconData icone;
@@ -15,7 +17,7 @@ class AtalhoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0xFFFFFAF2),
+      color: AppColors.fundo,
       elevation: 3,
       shadowColor: Colors.black26,
       shape: RoundedRectangleBorder(
@@ -32,7 +34,7 @@ class AtalhoCard extends StatelessWidget {
               Icon(
                 icone,
                 size: 36,
-                color: const Color(0xFF286448),
+                color: AppColors.verde,
               ),
               const SizedBox(height: 12),
               Text(
@@ -40,7 +42,7 @@ class AtalhoCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF292F29),
+                  color: AppColors.textoEscuro,
                 ),
               ),
             ],

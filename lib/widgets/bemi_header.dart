@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import '../screens/avisos_screen.dart';
+import '../theme/app_theme.dart';
 
 class BemiHeader extends StatelessWidget {
   const BemiHeader({super.key});
 
-  static const Color verde = Color(0xFF174F3B);
-  static const Color dourado = Color(0xFFF2C879);
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: verde,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+      color: AppColors.verde,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 22,
+      ),
       child: Row(
         children: [
           Image.asset(
@@ -24,7 +25,7 @@ class BemiHeader extends StatelessWidget {
           const Text(
             'BEMI',
             style: TextStyle(
-              color: dourado,
+              color: AppColors.dourado,
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),
@@ -34,12 +35,14 @@ class BemiHeader extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const AvisosScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const AvisosScreen(),
+                ),
               );
             },
             icon: const Icon(
               Icons.notifications_none,
-              color: Colors.white,
+              color: AppColors.branco,
               size: 32,
             ),
           ),
