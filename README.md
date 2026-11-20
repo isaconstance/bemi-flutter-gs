@@ -116,6 +116,7 @@ Também permite encerrar a sessão e acessar a área de contatos familiares.
  </p>
 
 ## Link do Pitch
+https://youtu.be/520n4oWPWS0?si=yV1S8eoHzk_-RRrs
 https://drive.google.com/drive/folders/10cydE1Pr29piTpBhmMKePHgN6MqBHeef?usp=drive_link
 
 ## Equipe
